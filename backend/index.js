@@ -1,0 +1,40 @@
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import connectToDB from "./config/database.js";
+const app = express();
+import path from "path";
+import methodOverride from "method-override";
+import homeRoute from "./routes/homeRoute.js"
+import userRoute from "./routes/user.route.js";
+import companyRoute from "./routes/company.route.js";
+import cookieParser from "cookie-parser";
+import cors from "cors"
+
+const __dirname = path.resolve();
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
+app.use(cookieParser());
+
+const corsOptions = {
+    origin:'http://localhost:5173',
+    credentials:true
+}
+
+app.use(cors(corsOptions));
+
+
+connectToDB();
+
+// routes
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/home", homeRoute);
+app.use("/api/v1/company", companyRoute);
+
+
+export default app;
