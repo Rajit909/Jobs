@@ -4,12 +4,15 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
   try {
     const { fullName, email, phoneNumber,password, role } = req.body;
-
+    console.log(fullName, email, phoneNumber, password, role);
     if (!fullName || !email || !phoneNumber || !password || !role) {
       return res
         .status(400)
         .json({ message: "All fields are required", success: false });
     }
+
+    const file = req.file;
+
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
