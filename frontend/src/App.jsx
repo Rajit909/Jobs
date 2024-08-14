@@ -7,6 +7,9 @@ import Home from './components/Home'
 import Login from './components/auth/Login.jsx'
 import Signup from './components/auth/Signup.jsx'
 import Job from './components/Job'
+import Jobs from './components/Jobs'
+import Browse from './components/Browse'
+import Profile from './components/Profile'
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -23,21 +26,21 @@ function App() {
       element: <Signup/>
     },
     {
-      path: "/job",
-      element: <Job/>
+      path: "/jobs",
+      element: <Jobs/>
     },
     // {
     //   path: "/description/:id",
     //   element: <div>description</div>
     // },
-    // {
-    //   path: "/browse",
-    //   element: <div>browse</div>
-    // },
-    // {
-    //   path: "/profile",
-    //   element: <div>profile</div>
-    // },
+    {
+      path: "/browse",
+      element: <Browse/>
+    },
+    {
+      path: "/profile",
+      element: <Profile/>
+    },
     // {
     //   path:"/admin/companies",
     //   element: <div> companies</div>

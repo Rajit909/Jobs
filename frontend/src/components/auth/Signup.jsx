@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 import Footer from "../shared/Footer";
 import { Label } from "../ui/label";
@@ -9,10 +9,13 @@ import axios from "axios";
 import { Button } from "../ui/button";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const Signup = () => {
   const [input, setInput] = useState({
-    fullName: "",
+    fullname: "",
     email: "",
     phoneNumber: "",
     password: "",
@@ -20,7 +23,9 @@ const Signup = () => {
     file: "",
   });
 
+  const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -41,6 +46,7 @@ const Signup = () => {
       formData.append("file", input.file);
     }
     try {
+      dispatch(setLoading(true));
       const response = await axios.post(
         `${USER_API_END_POINT}/register`,
         formData,
@@ -55,16 +61,18 @@ const Signup = () => {
       }
     } catch (error) {
       console.log(error);
-      alert(error.response.data.message);
-      // toast.error(error.response.data.message);
+      // alert(error.response.data.message);
+      toast.error(error.response.data.message);
+    }finally{
+      dispatch(setLoading(false));
     }
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
@@ -80,8 +88,8 @@ const Signup = () => {
             <Label>Full Name</Label>
             <Input
               type="text"
-              name="fullName"
-              value={input.fullName}
+              name="fullname"
+              value={input.fullname}
               onChange={changeEventHandler}
               placeholder="Enter your full name"
             />
@@ -153,10 +161,18 @@ const Signup = () => {
               className="cursor-pointer"
             />
           </div>
-          {}
-          <Button type="submit" className="w-full ">
-            Signup
-          </Button>
+          {
+            loading ? (
+              <Button className="w-full my-4">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+              </Button>
+            ) : (
+              <Button type="submit" className="w-full my-4">
+                Signup
+              </Button>
+            )
+          }
+          
           <br />
           <span className="text-sm">
             Already have an account?{" "}

@@ -5,16 +5,19 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { CircleUser, LogOut, User2 } from "lucide-react";
+import { useSelector } from "react-redux";
+import store from "@/redux/store";
 
 const Navbar = () => {
-  let user = false;
+  const {user} = useSelector(store=> store.auth)
   return (
     <>
       <div className="bg-white">
         <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
           <div>
             <Link to="/">
-            <h2 className="text-2xl font-bold pl-2">
+            <h2 className=" flex items-center text-2xl font-bold ">
+              <img src="/logo.jpg" alt="logoImage" className="w-12"/>
               Job<span className="text-[#f83002]">Search</span>
             </h2>
             </Link>
@@ -24,8 +27,11 @@ const Navbar = () => {
                 <li>
                   <Link to="/">Home</Link>
                 </li>
-                <Link to={"/job"}>
-                  <li>Job</li>
+                <Link to={"/jobs"}>
+                  <li>Jobs</li>
+                </Link>
+                <Link to={"/browse"}>
+                  <li>Browse</li>
                 </Link>
             </ul>
             {
@@ -53,18 +59,23 @@ const Navbar = () => {
                                 {/* <AvatarImage src="https://github.com/shadcn.png" alt="Profile" /> */}
                             </Avatar>
                             <div>
-                              <h4 className="font-medium">Raj</h4>
+                              <h4 className="font-medium">{user.fullname}</h4>
                               <p className="text-sm text-muted-foreground">
-                                Users bio Lorem ipsum dolor sit amet.
+                                {user.email}
+                              </p>
+                              <p className=" text-center text-purple-700 rounded-sm bg-gray-200 mt-1 pb-1">
+                                {user.role}
                               </p>
                             </div>
                         </div>
                         <div className="flex flex-col my-2 text-gray-600">
                             <div className="flex w-fit items-center gap-2 cursor-pointer">
                                 <User2/>
+                                <Link to={'/profile'}>
                                 <Button variant="link">
                                     View Profile
                                 </Button>
+                                </Link>
 
                             </div>
                                 <div className="flex w-fit items-center gap-2 cursor-pointer">

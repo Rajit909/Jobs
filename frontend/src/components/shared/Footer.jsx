@@ -9,9 +9,12 @@ const Footer = () => {
         <div className="mx-auto w-full max-w-[1166px] px-4 xl:px-0">
           <div className="flex flex-col justify-between sm:px-[18px] md:flex-row md:px-10">
             <div className="md:w-[316px]">
-                <h1 className="text-white font-extrabold text-[18px]">
-                  <span className="text-rose-600">Job</span>Search
+                <div className="flex items-center gap-2">
+            <img src="/logo.jpg" alt="logoImage" className="w-12 rounded-3xl"/>
+                <h1 className="text-white font-extrabold text-[18px]">Job
+                  <span className="text-rose-500">Search</span>
                 </h1>
+                </div>
               <p className="mt-[18px] text-[15px] font-normal text-white/[80%]">
                 Search for Jobs. Get Hired. Post a Job. Hire the best talent.
               </p>
