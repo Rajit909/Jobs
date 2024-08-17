@@ -20,7 +20,7 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     role: "",
-    file: "",
+    profilePhoto: "",
   });
 
   const { loading, user } = useSelector((store) => store.auth);
@@ -30,8 +30,9 @@ const Signup = () => {
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+  console.log(input);
   const changeFileHandler = (e) => {
-    setInput({ ...input, file: e.target.files?.[0] });
+    setInput({ ...input, profilePhoto: e.target.files?.[0] });
   };
 
   const submitHandler = async (e) => {
@@ -43,7 +44,7 @@ const Signup = () => {
       formData.append(key, input[key]);
     });
     if (input.file) {
-      formData.append("file", input.file);
+      formData.append("profilePhoto", input.file);
     }
     try {
       dispatch(setLoading(true));
@@ -156,7 +157,7 @@ const Signup = () => {
             <Input
               accept="image/*"
               type="file"
-              name="file"
+              name="profilePhoto"
               onChange={changeFileHandler}
               className="cursor-pointer"
             />

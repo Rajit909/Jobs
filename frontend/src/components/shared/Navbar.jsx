@@ -4,12 +4,34 @@ import { Popover, PopoverContent } from "../ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { CircleUser, LogOut, User2 } from "lucide-react";
-import { useSelector } from "react-redux";
-import store from "@/redux/store";
+import {  LogOut, User2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { USER_API_END_POINT } from "@/utils/constant";
+import { setUser } from "@/redux/authSlice";
+import axios from "axios";
 
 const Navbar = () => {
   const {user} = useSelector(store=> store.auth)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+
+  const logoutHandler = async () => {
+      try {
+        const response = await axios.post(`${USER_API_END_POINT}/logout`, {withCredentials: true});
+        console.log(response)
+        if (response.data.success) {
+          dispatch(setUser(null))
+          navigate('/')
+          toast.success(response.data.message)
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error(error.response.data.message)
+      }
+  }
+
   return (
     <>
       <div className="bg-white">
@@ -24,15 +46,24 @@ const Navbar = () => {
           </div>
           <div className="flex items-center gap-12 mr-4">
             <ul className="flex font-medium items-center gap-5">
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <Link to={"/jobs"}>
-                  <li>Jobs</li>
-                </Link>
-                <Link to={"/browse"}>
-                  <li>Browse</li>
-                </Link>
+             {
+              user && user.role === 'recruiter' ? (
+                <>
+                  <li>
+                    <Link to={"/admin/companies"}>Compnies</Link>
+                  </li>
+                  <li>
+                    <Link to={"/admin/jobs"}>Jobs</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/jobs">Jobs</Link></li>
+                <li><Link to="/browse">Browse</Link></li>
+            </>
+              )
+             }
             </ul>
             {
               !user ? (
@@ -47,16 +78,15 @@ const Navbar = () => {
               ) : (
                 <Popover>
                 <PopoverTrigger asChild>
-                    <Avatar className="cursor-pointer p-2">
-                    {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-                    <CircleUser/>
-                    </Avatar>
+                <Avatar className="cursor-pointer">
+                    <AvatarImage src={user?.profile?.profilePhoto} alt="Profile" />
+                </Avatar>
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
                     <div className="">
                         <div className="flex gap-2 space-y-2">
                             <Avatar className="cursor-pointer">
-                                {/* <AvatarImage src="https://github.com/shadcn.png" alt="Profile" /> */}
+                                <AvatarImage src={user?.profile?.profilePhoto} alt="Profile" />
                             </Avatar>
                             <div>
                               <h4 className="font-medium">{user.fullname}</h4>
@@ -80,7 +110,7 @@ const Navbar = () => {
                             </div>
                                 <div className="flex w-fit items-center gap-2 cursor-pointer">
                                     <LogOut/>
-                                    <Button variant="link">
+                                    <Button variant="link" onClick={logoutHandler}>
                                         Logout
                                     </Button>
                                 </div>
