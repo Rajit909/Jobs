@@ -3,8 +3,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setSearchedQuery } from "@/redux/jobSlice";
 
 const category = [
+    "Web",
     "Frontend Developer",
     "Backend Developer",
     "Data Science",
@@ -62,7 +64,7 @@ const category = [
     "Customer Support Specialist",
     "Finance Manager",
     "Accountant",
-    "HR Manager",
+    "HR",
     "HR Executive",
     "HR Recruiter",
     "HR Generalist",
@@ -96,8 +98,8 @@ const CategoryCarousel = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const searchJobHandler = (query) => {
-        // dispatch(setSearchedQuery(query));
-        navigate("/jobs");
+        dispatch(setSearchedQuery(query));
+        navigate("/browse");
     };
 
 

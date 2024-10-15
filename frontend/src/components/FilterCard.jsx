@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
+import { setSearchedQuery } from "@/redux/jobSlice";
 
 const filterData = [
   {
@@ -12,8 +13,6 @@ const filterData = [
       "Noida",
       "Gurgaon",
       "Banglore",
-      "Pune",
-      "Hyderabad",
     ],
   },
   {
@@ -22,26 +21,12 @@ const filterData = [
       "Airlines/Aviation",
       "Banking",
       "Software It",
-      "Civil JObs",
       "Financial Jobs",
-      "Hospitality",
       "HR",
     ],
   },
-  {
-    filterType: "Job Type",
-    array: ["Full Time", "Part Time", "Internship", "Freelance"],
-  },
-  {
-    filterType: "Salary",
-    array: [
-      "0-20k",
-      "20k-40k",
-      "40k-60k",
-      "60k-80k",
-     
-    ],
-  },
+
+ 
 ];
 
 const FilterCard = () => {
@@ -52,13 +37,14 @@ const FilterCard = () => {
   };
 
   useEffect(() => {
-    // dispatch(setSearchedQuery(selectedValue))
+    dispatch(setSearchedQuery(selectedValue))
+    console.log(selectedValue)
   }, [selectedValue]);
   return (
     <>
-      <div className="w-full bg-white p-3 rounded-md">
-        <h1 className="font-bold text-lg">Filter Jobs</h1>
-        <hr className="mt-3"/>
+      <div className="w-full bg-white rounded-md">
+        {/* <h1 className="font-bold text-lg">Filter Jobs</h1> */}
+        <hr className=""/>
         <RadioGroup value={selectedValue} onValueChange={changeHandler}>
           {
             filterData.map((data, index) => (

@@ -7,11 +7,13 @@ import { setSearchJobByText } from '@/redux/jobSlice'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import AdminJobsTable from './AdminJobsTable'
+import { useNavigate } from 'react-router-dom'
 
 const Adminjobs = () => {
     useGetAllAdminJobs();
     const [input, setInput] = useState('')
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(setSearchJobByText(input))
@@ -19,7 +21,7 @@ const Adminjobs = () => {
   return (
     <>
     <Navbar/>
-            <section>
+            <section className='px-4'>
             <div className='max-w-6xl mx-auto my-10'>
         <div className='flex items-center justify-between my-5'>
           <Input

@@ -135,11 +135,9 @@ export const updateProfile = async (req, res) => {
         //         success: false
         //     });
         // }
-        
-        // cloudinary ayega idhar
-        // const fileUri = getDataUri(file);
-        // const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-
+        // cloudinary upload
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
 
         let skillsArray;
@@ -163,11 +161,11 @@ export const updateProfile = async (req, res) => {
         if(skills) user.profile.skills = skillsArray
         if(role) user.role = role
       
-        // resume comes later here...
-        // if(cloudResponse){
-        //     user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-        //     user.profile.resumeOriginalName = file.originalname // Save the original file name
-        // }
+        // resume comes here
+        if(cloudResponse){
+            user.profile.resume = cloudResponse.secure_url // save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname // Save the original file name
+        }
 
 
         await user.save();

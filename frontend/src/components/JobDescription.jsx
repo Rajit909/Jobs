@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import Navbar from "./shared/Navbar";
@@ -17,6 +17,7 @@ const JobDescription = () => {
     (application) => application.applicant === user?._id
   );
   const [isApplied, setIsApplied] = useState(isIntiallyApplied);
+  const navigate = useNavigate();
 
   console.log(singleJob);
   const params = useParams();
@@ -28,16 +29,22 @@ const JobDescription = () => {
     const currentDate = new Date();
     const timeDifference = currentDate - createdAt;
     return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  }
+  };
 
   const applyJobHandler = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     try {
       const response = await axios.get(
         `${APPLICATION_API_END_POINT}/apply/${jobId}`,
         { withCredentials: true }
       );
       console.log(response);
+      
       if (response.data.success) {
+      
         setIsApplied(true); //update the state
         const updatedSingleJob = {
           ...singleJob,
@@ -60,14 +67,16 @@ const JobDescription = () => {
           withCredentials: true,
         });
         console.log(response);
-        if (response.data.success) {
-          dispatch(setSingleJob(response.data.job));
-          setIsApplied(
-            response.data.job.applications.some(
-              (application) => application.applicant === user?._id
-            )
-          );
-        }
+          
+          if (response.data.success) {
+            dispatch(setSingleJob(response.data.job));
+            setIsApplied(
+              response.data.job.applications.some(
+                (application) => application.applicant === user?._id
+              )
+            );
+          }
+       
       } catch (error) {
         console.log(error);
         toast.success(error.response.data.message);
@@ -77,14 +86,14 @@ const JobDescription = () => {
   }, [jobId, dispatch, user?._id]);
   return (
     <>
-      <Navbar />
-      <div className="max-w-7xl mx-10 my-10">
+      {/* <Navbar /> */}
+      <div className="max-w-7xl mx-8 my-10">
         <div className="flex items-center justify-between">
           <div>
-          <p className="text-sm text-gray-500 ">
-              {
-                daysAgoFunction(singleJob?.createdAt) === 0 ? "Today" : `${daysAgoFunction(singleJob?.createdAt)} days ago`
-              }
+            <p className="text-sm text-gray-500 ">
+              {daysAgoFunction(singleJob?.createdAt) === 0
+                ? "Today"
+                : `${daysAgoFunction(singleJob?.createdAt)} days ago`}
             </p>
             <h1 className="font-bold text-xl">{singleJob?.title}</h1>
             <div className="flex items-center gap-2 mt-4">
@@ -102,13 +111,13 @@ const JobDescription = () => {
           <Button
             onClick={isApplied ? null : applyJobHandler}
             disabled={isApplied}
-            className={`rounded-lg ${
-              isApplied
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-[#7209b7] hover:bg-[#5f32ad]"
-            }`}>
+            className={`rounded-lg ${isApplied  ? "bg-gray-600 cursor-not-allowed" : "bg-[#7209b7] hover:bg-[#5f32ad]"}`}
+          >
+            { 
+            user ?
+            (isApplied ? "Already Applied" : "Apply Now") : "Login to Apply"
 
-            {isApplied ? "Already Applied" : "Apply Now"}
+            }
           </Button>
         </div>
         <h1 className="border-b-2 border-b-gray-300 font-medium py-4">
@@ -136,13 +145,13 @@ const JobDescription = () => {
           <h1 className="font-bold my-1">
             Experience:{" "}
             <span className="pl-4 font-normal text-gray-800">
-              {singleJob?.experience} yrs
+              {singleJob?.experienceLevel} yrs
             </span>
           </h1>
           <h1 className="font-bold my-1">
             Salary:{" "}
             <span className="pl-4 font-normal text-gray-800">
-              {singleJob?.salary}LPA
+              {singleJob?.salary}
             </span>
           </h1>
           <h1 className="font-bold my-1">
@@ -157,8 +166,18 @@ const JobDescription = () => {
               {singleJob?.createdAt.split("T")[0]}
             </span>
           </h1>
+          
         </div>
+        <Link to="/">
+        <Button
+            className={`rounded-lg`}
+            >
+            Back to home
+          </Button>
+            </Link>
+        
       </div>
+      
       <Footer />
     </>
   );

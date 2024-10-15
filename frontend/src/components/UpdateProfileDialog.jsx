@@ -22,7 +22,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
         phoneNumber: user?.phoneNumber || "",
         bio: user?.profile?.bio || "",
         skills: user?.profile?.skills?.map(skill => skill) || "",
-        file: user?.profile?.resume || ""
+        userfiles: user?.profile?.resume || ""
     });
 
     console.log(input)
@@ -32,9 +32,9 @@ const UpdateProfileDialog = ({open, setOpen}) => {
     }
 
     const fileChangeHandler = (e) => {
-        const file = e.target.files?.[0];
-        setInput({ ...input, file })
+        setInput({ ...input, userfiles: e.target.files?.[0] })
     }
+   
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -43,7 +43,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
             formData.append(key, input[key])
         })
         if (input.file) {
-            formData.append("file", input.file)
+            formData.append("userfiles", input.file)
         }
         try {
             setLoading(true)
@@ -91,6 +91,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
                                     value={input.fullname}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
@@ -102,6 +103,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
                                     value={input.email}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
@@ -112,6 +114,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
                                     value={input.phoneNumber}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
@@ -122,6 +125,7 @@ const UpdateProfileDialog = ({open, setOpen}) => {
                                     value={input.bio}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
@@ -132,17 +136,19 @@ const UpdateProfileDialog = ({open, setOpen}) => {
                                     value={input.skills}
                                     onChange={changeEventHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="file" className="text-right">Resume</Label>
+                                <Label htmlFor="userfiles" className="text-right">Resume</Label>
                                 <Input
-                                    id="file"
-                                    name="file"
+                                    id="userfiles"
+                                    name="userfiles"
                                     type="file"
                                     accept="application/pdf"
                                     onChange={fileChangeHandler}
                                     className="col-span-3"
+                                    required
                                 />
                             </div>
                         </div>

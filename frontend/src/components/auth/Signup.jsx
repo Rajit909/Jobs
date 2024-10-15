@@ -20,7 +20,7 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     role: "",
-    profilePhoto: "",
+    userfiles: "",
   });
 
   const { loading, user } = useSelector((store) => store.auth);
@@ -32,7 +32,7 @@ const Signup = () => {
   };
   console.log(input);
   const changeFileHandler = (e) => {
-    setInput({ ...input, profilePhoto: e.target.files?.[0] });
+    setInput({ ...input, userfiles: e.target.files?.[0] });
   };
 
   const submitHandler = async (e) => {
@@ -44,7 +44,7 @@ const Signup = () => {
       formData.append(key, input[key]);
     });
     if (input.file) {
-      formData.append("profilePhoto", input.file);
+      formData.append("userfiles", input.file);
     }
     try {
       dispatch(setLoading(true));
@@ -123,6 +123,7 @@ const Signup = () => {
               value={input.password}
               onChange={changeEventHandler}
               placeholder="Create your password"
+              required
             />
           </div>
           <div className="flex items-center justify-between">
@@ -147,6 +148,7 @@ const Signup = () => {
                   checked={input.role === "recruiter"}
                   onChange={changeEventHandler}
                   className="cursor-pointer"
+
                 />
                 <Label htmlFor="r2">Recruiter</Label>
               </div>
@@ -157,9 +159,10 @@ const Signup = () => {
             <Input
               accept="image/*"
               type="file"
-              name="profilePhoto"
+              name="userfiles"
               onChange={changeFileHandler}
               className="cursor-pointer"
+              required
             />
           </div>
           {

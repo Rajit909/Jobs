@@ -34,13 +34,15 @@ const CompaniesTable = () => {
                 </TableHeader>
                 <TableBody>
                     {
-                        filterCompany?.map((company) => (
-                            <tr>
+                        filterCompany?.map((company, index) => (
+                            <tr key={index}>
                                 <TableCell>
-                                    <Avatar>
-                                        {/* <AvatarImage src={company.logo}/> */}
-                                        <User2/>
-                                    </Avatar>
+                                    {
+                                        company.logo ? <Avatar>
+                                            <AvatarImage src={company.logo} />
+                                        </Avatar> : <User2 />
+                                    }
+                                  
                                 </TableCell>
                                 <TableCell>{company.name}</TableCell>
                                 <TableCell>{company.createdAt.split("T")[0]}</TableCell>

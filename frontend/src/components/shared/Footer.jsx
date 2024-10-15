@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="md:w-[316px]">
                 <div className="flex items-center gap-2">
             <img src="/logo.jpg" alt="logoImage" className="w-12 rounded-3xl"/>
-                <h1 className="text-white font-extrabold text-[18px]">Job
+                <h1 className="text-white font-extrabold text-[18px]">ROJGAR
                   <span className="text-rose-500">Search</span>
                 </h1>
                 </div>
